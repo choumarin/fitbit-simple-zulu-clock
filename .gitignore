@@ -1,2 +1,5 @@
 /fitbit-simple-zulu-clock.iml
 /.idea/
+/package-lock.json
+/build/
+/node_modules/
