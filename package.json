@@ -1,0 +1,28 @@
+{
+  "fitbit": {
+    "appUUID": "8b4e3996-3bb6-414d-9095-329b604ee62a",
+    "appType": "clockface",
+    "appDisplayName": "Simple Zulu Clock",
+    "iconFile": "resources/icon.png",
+    "wipeColor": "",
+    "requestedPermissions": [
+      "access_heart_rate",
+      "access_activity"
+    ],
+    "buildTargets": [
+      "higgs",
+      "meson",
+      "gemini",
+      "mira"
+    ],
+    "i18n": {
+      "en": {
+        "name": "Simple Zulu Clock"
+      }
+    },
+    "defaultLanguage": "en-US"
+  },
+  "devDependencies": {
+    "@fitbit/sdk": "~4.0.0"
+  }
+}

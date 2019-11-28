@@ -1,0 +1,67 @@
+.background {
+  viewport-fill: black;
+}
+
+.clock {
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  x: 50%;
+}
+
+.main {
+  text-anchor: middle;
+  fill: white;
+  font-size: 100;
+  y: 50%+50;
+}
+
+.zulu {
+  text-anchor: middle;
+  fill: grey;    
+  font-size: 60;
+  y: 80%+40;
+}
+
+.header {
+  fill: white;
+  font-family: System-Regular;
+  font-size: 20;
+  y: 5%+10;
+}
+
+.date {
+  font-family: System-Regular;
+  text-anchor: middle;
+  fill: white;
+  font-size: 30;
+  x: 50%;
+  y: 20%+25;
+  text-length: 11;
+}
+
+.battery {
+  x: 15%;
+  text-anchor: start;
+  text-length: 4;
+}
+
+.hr {
+  x: 98%;
+  text-anchor: end;
+  text-length: 3;
+}
+
+.icon {
+  fill: white;
+  y: 5%-7;
+  width: 20;
+  height: 20;
+}
+
+.hr-img {
+  x: 98%-55;
+}
+
+.batt-img {
+  x: 15%-24;
+}
