@@ -2,8 +2,8 @@ function mySettings(props) {
   return (
     <Page>
         <Toggle
-          settingsKey="alwaysOnToggle"
-          label="Always on display"
+          settingsKey="noTimeoutToggle"
+          label="Disable display timeout"
         />
       <Section>
         <Toggle

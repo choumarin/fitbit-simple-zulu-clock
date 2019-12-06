@@ -8,17 +8,18 @@ import { me as appbit } from "appbit";
 import { display } from "display";
 import { BodyPresenceSensor } from "body-presence";
 import * as messaging from "messaging";
+import { me as device } from "device";
 
 let settings = {
-  alwaysOnToggle: true,
+  noTimeoutToggle: true,
   nightModeToggle: true,
-  nightModeStart: {"values":[{"name":"22:00"}]},
-  nightModeEnd: {"values":[{"name":"07:00"}]}
+  nightModeStart: { "values": [{ "name": "22:00" }] },
+  nightModeEnd: { "values": [{ "name": "07:00" }] }
 };
 
 // Listen for the onmessage event
 messaging.peerSocket.onmessage = evt => {
-  console.log("rcv:"+JSON.stringify(evt));
+  console.log("rcv:" + JSON.stringify(evt));
   settings[evt.data.key] = evt.data.value;
   refreshClock(new Date());
 }
@@ -45,15 +46,15 @@ function refreshClock(today) {
   }
   const mins = util.zeroPad(today.getMinutes());
   mainClock.text = `${hours}${mins}`;
-  
+
   const zulu_hours = util.zeroPad(today.getUTCHours());
   const zulu_mins = util.zeroPad(today.getUTCMinutes());
-  let zulu_delta = today.getTimezoneOffset()/60;
+  let zulu_delta = today.getTimezoneOffset() / 60;
   if (zulu_delta >= 0) {
     zulu_delta = "+" + zulu_delta;
   }
   zuluClock.text = `${zulu_hours}${zulu_mins}Z (${zulu_delta})`;
-  
+
   let day = util.dayString(today.getDay());
   let month = util.monthString(today.getMonth());
   let date = today.getDate();
@@ -67,7 +68,7 @@ clock.ontick = (evt) => {
 const batteryElem = document.getElementById("battery");
 batteryElem.text = `${battery.chargeLevel}%`; // initialize on startup
 battery.onchange = (charger, evt) => {
-   batteryElem.text = `${battery.chargeLevel}%`;
+  batteryElem.text = `${battery.chargeLevel}%`;
 }
 
 
@@ -79,7 +80,7 @@ if (HeartRateSensor && appbit.permissions.granted("access_heart_rate")) {
   hrm.addEventListener("reading", () => {
     heartRateElem.text = `${hrm.heartRate}`;
   });
-  
+
   if (BodyPresenceSensor) {
     const body = new BodyPresenceSensor();
     body.addEventListener("reading", () => {
@@ -95,19 +96,25 @@ if (HeartRateSensor && appbit.permissions.granted("access_heart_rate")) {
 }
 
 
-// Always on component.
-let alwaysOnTimer;
+// Poke disaplay component.
+let pokeDisplayTimer;
 let timerPeriod = 8000;
+var amoledModels = ["Versa 2"];
+
 function onDisplayChange() {
-  clearTimeout(alwaysOnTimer);
-  alwaysOnTimer = setTimeout(alwaysOn, timerPeriod);
+  if (amoledModels.indexOf(device.modelName) >= 0) {
+    clearTimeout(pokeDisplayTimer);
+    pokeDisplayTimer = setTimeout(pokeDisplay, timerPeriod);
+  } else {
+    display.autoOff = settings.noTimeoutToggle;
+  }
 }
 
-function alwaysOn() {
-  console.log(JSON.stringify({settings:settings,nightTime:nightTime}));
-  if (display.on && settings.alwaysOnToggle && !(settings.nightModeToggle && nightTime)) {
+function pokeDisplay() {
+  console.log(JSON.stringify({ settings: settings, nightTime: nightTime }));
+  if (display.on && settings.noTimeoutToggle && !(settings.nightModeToggle && nightTime)) {
     display.poke();
-    alwaysOnTimer = setTimeout(alwaysOn, timerPeriod);      
+    pokeDisplayTimer = setTimeout(pokeDisplay, timerPeriod);
   }
 }
 
