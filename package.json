@@ -7,7 +7,8 @@
     "wipeColor": "",
     "requestedPermissions": [
       "access_heart_rate",
-      "access_activity"
+      "access_activity",
+      "access_aod"
     ],
     "buildTargets": [
       "higgs",
@@ -23,7 +24,7 @@
     "defaultLanguage": "en-US"
   },
   "devDependencies": {
-    "@fitbit/sdk": "~4.0.0",
+    "@fitbit/sdk": "~4.1.0",
     "@fitbit/sdk-cli": "^1.7.0"
   },
   "scripts": {

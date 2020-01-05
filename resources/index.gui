@@ -1,8 +1,8 @@
 <svg class="background">
   <image class="icon batt-img" href="stat_am_solid_24px.png"/>
   <text id="battery" class="header battery">43%</text>
-  <image class="icon hr-img" href="stat_hr_open_24px.png"/>
-  <text id="hr" class="header hr">--</text>
+  <image class="icon hr-img aod-hide" href="stat_hr_open_24px.png"/>
+  <text id="hr" class="header hr aod-hide">--</text>
   <text id="date" class="date">Thu Nov 24</text>
   <text id="mainClock" class="clock main"/>
   <text id="zuluClock" class="clock zulu"/>

@@ -32,6 +32,10 @@ let nightTime = false;
 
 clock.granularity = "minutes";
 
+if (display.aodAvailable && appbit.permissions.granted("access_aod")) {
+  display.aodAllowed = true;
+}
+
 function refreshClock(today) {
   let hours = today.getHours();
   if (hours >= util.parseNightTime(settings.nightModeStart) || hours < util.parseNightTime(settings.nightModeEnd)) {
@@ -71,18 +75,18 @@ battery.onchange = (charger, evt) => {
   batteryElem.text = `${battery.chargeLevel}%`;
 }
 
-
 // Heartrate component.
 const heartRateElem = document.getElementById("hr");
-
+let hrm = null;
+let body = null;
 if (HeartRateSensor && appbit.permissions.granted("access_heart_rate")) {
-  const hrm = new HeartRateSensor({ frequency: 1 });
+  hrm = new HeartRateSensor({ frequency: 1 });
   hrm.addEventListener("reading", () => {
     heartRateElem.text = `${hrm.heartRate}`;
   });
 
   if (BodyPresenceSensor) {
-    const body = new BodyPresenceSensor();
+    body = new BodyPresenceSensor();
     body.addEventListener("reading", () => {
       if (!body.present) {
         hrm.stop();
@@ -102,12 +106,24 @@ let timerPeriod = 8000;
 var amoledModels = ["Versa 2"];
 
 function onDisplayChange() {
-  if (amoledModels.indexOf(device.modelName) >= 0) {
-    clearTimeout(pokeDisplayTimer);
-    pokeDisplayTimer = setTimeout(pokeDisplay, timerPeriod);
-  } else {
-    display.autoOff = settings.noTimeoutToggle;
-  }
+    if (display.aodAllowed) {
+        if (!display.aodActive && display.on) {
+            hrm != null && hrm.start();
+            body!= null && body.start();
+            document.getElementsByClassName("aod-hide").forEach(elem => elem.style.display = "inline");
+        } else  {
+            hrm != null && hrm.stop();
+            body!= null && body.stop();
+            document.getElementsByClassName("aod-hide").forEach(elem => elem.style.display = "none");
+        }
+    } else {
+        if (amoledModels.indexOf(device.modelName) >= 0) {
+            clearTimeout(pokeDisplayTimer);
+            pokeDisplayTimer = setTimeout(pokeDisplay, timerPeriod);
+        } else {
+            display.autoOff = settings.noTimeoutToggle;
+        }
+    }
 }
 
 function pokeDisplay() {
